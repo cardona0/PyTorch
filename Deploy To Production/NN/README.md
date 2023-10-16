@@ -1,2 +1,2 @@
 ## deployes pytorch model for wine quality
-https://cardona0.github.io/PyTorch/
+https://cardona0.github.io/PyTorch/DeployToProduction/NN/
