@@ -1,78 +1,41 @@
-<html>
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
-  <script src="./index.js"></script>
-  
-  <style>
-      
-      table, th, td {
-           border: 1px solid;
-      }
-      
-      #leftbox {
-                float:left; 
-                width:33%;
-                height:300px;
-      }
-      #middlebox{
-                float:left; 
-                width:33%;
-                height:300px;
-        }
-        #rightbox{
-                float:right;
-                width:33%;
-                height:300px;
-        }
-        h1{
-                color:green;
-                text-align:center;
-        }
-     
-     
-      
-  </style>
-</head>
-<body>
-  
-  <h1> Wine Quality XGBoost </h1>
-  
-  
-  
-  
-    <div id = "boxes1">
-         
-              
-  <input type="text" id="box1" value="38"> x1 <br/>
-  <input type="text" id="box2" value="0"> x2 <br/>
-  <input type="text" id="box3" value="300"> x3  <br/>
-  <input type="text" id="box4" value="27">x4 <br/>
-  <input type="text" id="box5" value="7" >x5 <br/>
-  <input type="text" id="box6" value="87618"> x6 <br/>
-  <input type="text" id="box7" value="0"> x7 <br/>
-  <input type="text" id="box8" value="300"> x8  <br/>
-  <input type="text" id="box9" value="27"> x9 <br/>
-  <input type="text" id="box10" value="7" > x10 <br/>
-  <input type="text" id="box11" value="87618"> x11 <br/>
+async function runExample() {
 
-    </div> 
-      
-  <div>
-      <input style="background-color:yellow" type="button" value="Run" onclick="runExample()"/>
-   </div>
-  
+    var x = new Float32Array( 1, 11 )
 
-        <div id = "boxes2">
-              
-           
-              <h2>Inference </h2>
-              
-               <div id="predictions">
-               </div>
-              
+    var x = [];
 
-        </div>
-  
+     x[0] = document.getElementById('box1').value;
+     x[1] = document.getElementById('box2').value;
+     x[2] = document.getElementById('box3').value;
+     x[3] = document.getElementById('box4').value;
+     x[4] = document.getElementById('box5').value;
+     x[5] = document.getElementById('box6').value;
+     x[6] = document.getElementById('box7').value;
+     x[7] = document.getElementById('box8').value;
+     x[8] = document.getElementById('box9').value;
+     x[9] = document.getElementById('box10').value;
+     x[10] = document.getElementById('box11').value;
 
-</body>
-</html>
+    let tensorX = new ort.Tensor('float32', x, [1, 11] );
+    let feeds = {float_input: tensorX};
+
+    let session = await ort.InferenceSession.create('xgboost_WineQuality_ort.onnx');
+    
+   let result = await session.run(feeds);
+   let outputData = result.variable.data;
+
+  outputData = parseFloat(outputData).toFixed(2)
+
+   let predictions = document.getElementById('predictions');
+
+  predictions.innerHTML = ` <hr> Got an output tensor with values: <br/>
+   <table>
+     <tr>
+       <td>  Rating of Wine Quality  </td>
+       <td id="td0">  ${outputData}  </td>
+     </tr>
+  </table>`;
+    
+
+
+}
