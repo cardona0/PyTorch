@@ -1,4 +1,4 @@
-async function runExample(){
+async function runExample() {
 
   var x = [];
 
@@ -14,14 +14,15 @@ async function runExample(){
   x[9] = document.getElementById('box10').value;
   x[10] = document.getElementById('box11').value;
 
-  let tensorX = new onnx.Tensor(x, 'float32', [1,11]);
+  let tensorX = new onnx.Tensor(x, 'float32', [1, 11]);
 
   let session = new onnx.InferenceSession();
 
-  await session.loadModel.("DLnet_WineDate.onnx");
+  await session.loadModel("DLnet_WineData.onnx");
   let outputMap = await session.run([tensorX]);
   let outputData = outputMap.get('output1');
 
+  
   let predictions = document.getElementById('predictions');
   predictions.innerHTML = ` <hr> Got an output tensor with value: <br />
   <table>
@@ -31,4 +32,7 @@ async function runExample(){
      </tr>
   </table>
   `;
+
+
+  
 }
